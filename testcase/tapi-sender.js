@@ -79,6 +79,27 @@ APISender.prototype.start = function () {
 /**
  * test case for parent process's http server of gpns-sender
  */
-new APISender('127.0.0.1', 7000).start();
+//new APISender('127.0.0.1', 7000).start();
+
+var nconf = require('nconf');
+console.log(nconf.argv().env());
+
+
+// get local ip
+var os = require('os')
+
+var interfaces = os.networkInterfaces();
+var addresses = [];
+for (k in interfaces) {
+    for (k2 in interfaces[k]) {
+        var address = interfaces[k][k2];
+        if (address.family == 'IPv4' && !address.internal) {
+            addresses.push(address.address);
+        }
+    }
+}
+
+console.log(addresses);
+
 
 
