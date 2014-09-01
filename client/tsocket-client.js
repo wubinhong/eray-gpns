@@ -28,7 +28,7 @@ function SocketClient(senderPort, senderHost, pushAdd) {
 util.inherits(SocketClient, cNodeBase.CNodeBase);
 SocketClient.prototype.connect = function () {
     var thisObj = this;
-    thisObj.debug('connect sender launch...');
+    thisObj.info('connect sender launch...');
     var client = net.Socket();
     client.connect({
         port: thisObj.senderPort,
@@ -36,14 +36,14 @@ SocketClient.prototype.connect = function () {
     }, function () {
         thisObj.localAddress = this.localAddress;
         thisObj.localPort = this.localPort;
-        thisObj.debug('new connection[Port:%s <=> %s]', this.localPort, thisObj.pushAdd);
+        thisObj.info('new connection[Port:%s <=> %s]', this.localPort, thisObj.pushAdd);
     });
     client.on('data', function (data) { // 7|5000# or 1#
         var dataParser = new YDataParser();
         dataParser.push(data);
         var sData = dataParser.popNextMsg(false);
         while(sData != null) {
-            thisObj.log('<== on data serverMsg: %j', sData);
+            thisObj.debug('<== on data serverMsg: %j', sData);
             var serverMsg = new YMsg(sData);
             var sendMsg = new YMsg();
             switch (serverMsg.type) {
@@ -72,11 +72,11 @@ SocketClient.prototype.connect = function () {
  */
 SocketClient.prototype._handlePushAddRtn = function (socket, serverMsg, sendMsg) {
     var thisObj = this;
-    thisObj.debug('<== serverMsg: %s', serverMsg.encode());
+    thisObj.info('<== serverMsg: %s', serverMsg.encode());
     sendMsg.type = cMsg.EMsgType.cInfoRtn;
     sendMsg.content[cMsg.EMsgKey.cInfoRtn_pushAdd] = thisObj.pushAdd;
     // write response to server
-    thisObj.debug('==> regist pushadd: %s', sendMsg.encode());
+    thisObj.info('==> regist pushadd: %s', sendMsg.encode());
     socket.write(sendMsg.encode());
 };
 /**
@@ -88,20 +88,20 @@ SocketClient.prototype._handlePushAddRtn = function (socket, serverMsg, sendMsg)
  */
 SocketClient.prototype._handleHeartBeatItvl = function (socket, serverMsg, sendMsg) {
     var thisObj = this;
-    thisObj.debug('<== serverMsg: %s', serverMsg.encode());
+    thisObj.info('<== serverMsg: %s', serverMsg.encode());
     // client send heartbeat to server
     var interval = serverMsg.content[cMsg.EMsgKey.sHeartbeatItvl_itvl];
-    thisObj.debug('configure client heart beat interval: %s second', interval / 1000);
+    thisObj.info('configure client heart beat interval: %s second', interval / 1000);
     // add interval timer and add timer to timerMap for management
     setInterval(function () {
         var sendHBMsg = new YMsg();
         sendHBMsg.type = cMsg.EMsgType.cHeartbeat;   // content not important
-        thisObj.log('==> send cHeartbeat: %s', sendHBMsg.encode());
+        thisObj.debug('==> send cHeartbeat: %s', sendHBMsg.encode());
         socket.write(sendHBMsg.encode());
     }, interval);
     // write response to server
     sendMsg.type = cMsg.EMsgType.cHeartbeatItvlRtn;
-    thisObj.debug('==> heart beat itv configure success!: %s', sendMsg.encode());
+    thisObj.info('==> heart beat itv configure success!: %s', sendMsg.encode());
     socket.write(sendMsg.encode());
 };
 /**
@@ -128,10 +128,10 @@ var host = '127.0.0.1';
 //new SocketClient(host, 8000, '101616564451701').connect();
 //new SocketClient(host, 8000, '1386302521119520').connect();
 //new SocketClient(host, 8000, '032707400110201').connect();
+//new SocketClient(host, 8000, 'pushadd00').connect();
 new SocketClient(host, 8000, 'pushadd01').connect();
-new SocketClient(host, 8000, 'pushadd01').connect();
-//new SocketClient(host, 8000, 'pushadd01').connect();
 //new SocketClient(host, 8000, 'pushadd02').connect();
+//new SocketClient(host, 8000, 'pushadd03').connect();
 //new SocketClient(host, 8000, 'pushadd01').connect();
 
 //var host = '61.4.184.123';

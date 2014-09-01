@@ -32,6 +32,8 @@ var HTTP_SERVER_CONF = {
     RCVER_REGIST_URL: 'http://' + DIST_GPNS_RCVER_HOST + ':' + DIST_GPNS_RCVER_PORT + '/gpns/sender/regist.do',
     // deregister this http server to gpns-rcver, before http server stop or parent process exit
     RCVER_DEREGIST_URL: 'http://' + DIST_GPNS_RCVER_HOST + ':' + DIST_GPNS_RCVER_PORT + '/gpns/sender/deregist.do',
+    // rcver's api for destroy gpns-sender-child process's socket with specified pushadd
+    RCVER_SOCKET_DESTROY_URL: 'http://' + DIST_GPNS_RCVER_HOST + ':' + DIST_GPNS_RCVER_PORT + '/gpns/sender/child/socket/destroy.do',
     // get socket pool info
     PATH_SOOCKET_INFO: '/child/socket/info.do',
     // get sum total of socket pool
@@ -60,7 +62,8 @@ var CHILD_PROCESS_CONF = {
     gpnsRcverHost: DIST_GPNS_RCVER_HOST, // gpns-rcver的ip
     gpnsRcverPort: 9000,  // gpns-rcver的端口号
     gpnsRcverReconnectItvl: 5000,   // gpns-rcver的连接断掉，每隔多少毫秒重连一次
-    sendMsgToPushAddsPer: 200  // 每次发送推送消息给多少个pushAdd
+    sendMsgToPushAddsPer: 200,  // 每次发送推送消息给多少个pushAdd
+    pathGPNSRcverAPI4SocketDestroy: HTTP_SERVER_CONF.RCVER_SOCKET_DESTROY_URL
 };
 // other configuration
 var OTHER_CONF = {

@@ -8,7 +8,7 @@
  ***********************************************************************/
 // distributed property configuration
 //var DIST_REDIS_SERVER_HOST = '61.4.184.175';
-var DIST_REDIS_SERVER_HOST = '192.168.1.9';
+var DIST_REDIS_SERVER_HOST = '192.168.1.186';
 // =====================================================================
 
 

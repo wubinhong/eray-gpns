@@ -26,7 +26,7 @@ function YChildProcess(gparam) {
     this.msgArr = new Array();					// 存储待发消息的列表，每个待发消息中有其要发送的pushAdd列表
     this.gparam = gparam;						    // see GParam in main.js
 
-    this._comderRcvMsgSocket = null;
+    this._comderRcvMsgSocket = null;            // gpns-sender-child与gpns-rcver之间的socket消息通信通道
     this._comderRcvMsgParser = new YDataParser();	// 缓冲接收的推送信息，每次接收到一个完整的推动信息，则将此条推送信息从此变量中移除
 
     this._pid = process.pid + '_' + new Date().getTime();	// 每次启动this._pid一定不会和之前的任何子进程相同
@@ -108,10 +108,13 @@ YChildProcess.prototype._startParentMsgListener = function () {
                 function (thisChannel) {    // func invoked when socket receive pushadd
                     var pushAdd = thisChannel.pushAdd;
                     thisObj._debugChild('new connection register with pushadd: %s', pushAdd);
-                    thisObj._delChanlFromChild(pushAdd);
-                    thisObj._addChanlToChild(pushAdd, thisChannel);
-                    // push pending message
-                    thisObj.pushPendingMsg(thisChannel);
+                    // destroy socket with duplicate pushadd
+                    thisObj._callRcverAPI4SocketDestroy(pushAdd, function () {
+                        thisObj._delChanlFromChild(pushAdd);
+                        thisObj._addChanlToChild(pushAdd, thisChannel);
+                        // push pending message
+                        thisObj.pushPendingMsg(thisChannel);
+                    });
                     // socket event
                     handler.on('close', function (data) {
                         thisObj._traceChild('connection close: %s:%s',
@@ -140,7 +143,28 @@ YChildProcess.prototype._startParentMsgListener = function () {
         thisObj._socketPoolChecking();
     }, 500);
 };
+/**
+ * 调用gpns-rcver API接口，销毁指定pushadd和exclude的socket，防止出现重复的pushadd
+ * @param pushAdd 要销毁的socket对应的pushAdd
+ * @param cb 回调函数，当http请求返回结果后被调用
+ * @private
+ */
+YChildProcess.prototype._callRcverAPI4SocketDestroy = function (pushAdd, cb) {
+    var thisObj = this;
+    // get exclude (construct with message socket's localAdd and localPort)
+    var msgSocket = thisObj._comderRcvMsgSocket;
+    if(msgSocket) {   // if message socket haven't been destroyed
+        var uri = thisObj.gparam.pathGPNSRcverAPI4SocketDestroy;
+        var exclude = util.format('%s:%s', msgSocket.localAddress, msgSocket.localPort);
+        var query = JSON.stringify({pushAdd: pushAdd, exclude: exclude});
+        console.log(util.format('uri: %s', uri));
+        console.log(util.format('query: %j', query));
+        thisObj.httpPost(uri, query, function (str) {
+            if(cb) cb(str);
+        });
+    }
 
+};
 /**
  * 检测socket pool里的socket状态
  * @private
@@ -380,7 +404,6 @@ YChildProcess.prototype._addChanlToChild = function (pushAdd, channel) {
  * @private
  */
 YChildProcess.prototype._sendParentMsg4RcverMsgSocket = function (socket) {
-    console.log(socket instanceof net.Socket);
     var rcverMsgSocket = util.format('%s -> %s:%s', socket.localPort, socket.remoteAddress, socket.remotePort);
     process.send({action: 'rcverMsgSocket', data: rcverMsgSocket});	// 通知主进程，子进程与gpns-rcver的socket通道信息
 };

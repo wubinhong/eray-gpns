@@ -6,7 +6,7 @@
  * @date     2014-04-03
  ***************************************************************************/
 // distributed property configuration
-var DIST_LOGGER_LEVEL = 'trace'; // fatal|error|warn|info|debug|trace|log
+var DIST_LOGGER_LEVEL = 'info'; // fatal|error|warn|info|debug|trace|log
 // ========================================================================
 
 

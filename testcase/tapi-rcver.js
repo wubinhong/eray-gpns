@@ -46,7 +46,7 @@ APIRcver.prototype.pushMsg = function (path, query) {
             thisObj.info(str);
         });
     });
-    thisObj.info('==> [%s:%s%s]: %s', options.host, options.port, path, query);
+    thisObj.info('==> %s --> http://%s:%s%s', query, options.host, options.port, path);
     req.write(query);
     req.end();
 };
@@ -97,7 +97,7 @@ APIRcver.prototype.push = function (pushAdds) {
 APIRcver.prototype.getIp = function () {
     var query = {
         pushAdd: '1350436022172342'
-    }
+    };
     this.pushMsg(this.SERVER_PATH_GET_IP, JSON.stringify(query));
 };
 /**
@@ -105,16 +105,16 @@ APIRcver.prototype.getIp = function () {
  */
 APIRcver.prototype.senderChildSocketDestroy = function () {
     var query = {
-        pushAdd: 'pushadd01',
-        exclude: '127.0.0.1:56825'
-    }
+        pushAdd: 'pushadd0',
+        exclude: '127.0.0.1:56529'
+    };
     this.pushMsg(this.PATH_SENDER_CHILD_SOCKET_DESTROY, JSON.stringify(query));
 };
 /**
  * test case for getting gpns-rcver info
  */
 APIRcver.prototype.monitorRcverInfo = function () {
-    var query = {}
+    var query = {};
     this.pushMsg(this.PATH_MONITOR_RCVER_INFO, JSON.stringify(query));
 };
 
@@ -129,8 +129,8 @@ APIRcver.prototype.start = function () {
     // batch message push
 //    this.pushBatch(1000, 5000);
 //    this.getIp();
-    this.senderChildSocketDestroy();
-//    this.monitorRcverInfo();
+//    this.senderChildSocketDestroy();
+    this.monitorRcverInfo();
 };
 // 启动
 /**
