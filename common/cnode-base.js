@@ -10,7 +10,7 @@ var DIST_LOGGER_LEVEL = 'info'; // fatal|error|warn|info|debug|trace|log
 // ========================================================================
 
 
-var path = require('path'), util = require('util'), cp = require('child_process'),
+var config = require('../config/index.js'), path = require('path'), util = require('util'), cp = require('child_process'),
     http = require('http'), url = require('url');
 /**
  * Common NodeJs Base class for NodeJs subclass
@@ -20,12 +20,14 @@ function CNodeBase() {
 
 }
 
+var LOGGER_LEVEL = config.compo.logging.level;
+var LOGGER_DATEFORMAT = config.compo.logging.dateformat;
 CNodeBase.prototype.logger = require('tracer').colorConsole({
-    dateformat: 'yyyy-mm-dd HH:MM:ss', level: DIST_LOGGER_LEVEL});
+    dateformat: LOGGER_DATEFORMAT, level: LOGGER_LEVEL});
 CNodeBase.prototype.loggerStack1 = require('tracer').colorConsole({
-    dateformat: 'yyyy-mm-dd HH:MM:ss', level: DIST_LOGGER_LEVEL, stackIndex: 1});
+    dateformat: LOGGER_DATEFORMAT, level: LOGGER_LEVEL, stackIndex: 1});
 CNodeBase.prototype.loggerStack2 = require('tracer').colorConsole({
-    dateformat: 'yyyy-mm-dd HH:MM:ss', level: DIST_LOGGER_LEVEL, stackIndex: 2});
+    dateformat: LOGGER_DATEFORMAT, level: LOGGER_LEVEL, stackIndex: 2});
 /**
  * 创建子进程，如果程序运行在调试模式的话，则其调试端口在原来的基础上自增，以保证子进程也能够跟主进程一起调试
  * @param modulePath 运行（产生）子进程的js文件的相对路径，该路径相对于主进程文件

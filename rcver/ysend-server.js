@@ -133,7 +133,7 @@ YSendServer.prototype.destroyClientSocket = function (pushadd, exclude) {
  */
 YSendServer.prototype.startCmdAndExec = function () {
     var thisObj = this;
-    var timeout = thisObj._senderChildMsgSocketServerParams.SEND_MSG_START_LATE;
+    var timeout = thisObj._senderChildMsgSocketServerParams.SEND_MSG_PUSH_DELAY;
     thisObj._infoSendServer('《cmd VS exe》 recursion will launch in %s second...', timeout/1000);
     setTimeout(function () {
         thisObj._startComander.call(thisObj, null);

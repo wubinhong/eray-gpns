@@ -81,10 +81,6 @@ APISender.prototype.start = function () {
  */
 //new APISender('127.0.0.1', 7000).start();
 
-var nconf = require('nconf');
-console.log(nconf.argv().env());
-
-
 // get local ip
 var os = require('os')
 

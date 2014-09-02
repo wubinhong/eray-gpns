@@ -13,7 +13,7 @@ var net = require('net'), util = require('util');
 var YMap = require('../common/ymap').YMap, YDataParser = require('../common/ydata-parser').YDataParser,
     YChannel = require('./ychannel').YChannel, cNodeBase = require('../common/cnode-base'),
     YCmdMsg = require('../common/ycmd-msg').YCmdMsg, ECmdType = require('../common/ycmd-msg').ECmdType,
-    redisClient = require('../common/credis-client').redisClient;
+    redisClient = require('../common/credis-client').redisClient, config = require('../config/index.js');
 
 /**
  * 子进程类
@@ -155,7 +155,8 @@ YChildProcess.prototype._callRcverAPI4SocketDestroy = function (pushAdd, cb) {
     var msgSocket = thisObj._comderRcvMsgSocket;
     if(msgSocket) {   // if message socket haven't been destroyed
         var uri = thisObj.gparam.pathGPNSRcverAPI4SocketDestroy;
-        var exclude = util.format('%s:%s', msgSocket.localAddress, msgSocket.localPort);
+        var exclude = util.format('%s:%s', config.gpns.sender.host, msgSocket.localPort);
+        console.log('exclude: ' + exclude);
         var query = JSON.stringify({pushAdd: pushAdd, exclude: exclude});
         console.log(util.format('uri: %s', uri));
         console.log(util.format('query: %j', query));

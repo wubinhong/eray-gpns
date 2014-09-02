@@ -6,18 +6,9 @@
  * @version 1.0.0
  * @date    2014-04-24
  ***********************************************************************/
-// distributed property configuration
-//var DIST_REDIS_SERVER_HOST = '61.4.184.175';
-var DIST_REDIS_SERVER_HOST = '192.168.1.186';
-// =====================================================================
-
-
 var util = require('util'), redis =require('node-redis');
-var cNodeBase = require('./cnode-base'), pendingMsgPrefix = 'json:msg:', socketSenderPrefix = 'json:sender:';
+var cNodeBase = require('./cnode-base'), config = require('../config/index.js'), socketSenderPrefix = 'json:sender:';
 
-var REDIS_SERVER_PORT = 6379,                     // redis servers listen port
-    REDIS_SERVER_HOST = DIST_REDIS_SERVER_HOST,
-    REDIS_SERVER_AUTH = null;                     // redis servers auth info
 /**
  * main
  * @constructor
@@ -36,7 +27,7 @@ util.inherits(RedisClient, cNodeBase.CNodeBase);
  * @private
  */
 RedisClient.prototype._getKey4PendingMsg = function (key) {
-    return pendingMsgPrefix + key;
+    return config.compo.redis.prefix.pending_msg + key;
 };
 /**
  * get key for sender, with the following storage structure: json:sender:${pushadd}
@@ -207,4 +198,4 @@ RedisClient.prototype.saveSocketSender = function (pushAdd, sender, callback) {
 };
 
 exports.RedisClient = RedisClient;
-exports.redisClient = new RedisClient(REDIS_SERVER_PORT, REDIS_SERVER_HOST, REDIS_SERVER_AUTH);
+exports.redisClient = new RedisClient(config.compo.redis.session.port, config.compo.redis.session.host, config.compo.redis.session.author);

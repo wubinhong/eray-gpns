@@ -9,27 +9,23 @@
  ***************************************************************************/
 var YSendServer = require('./ysend-server').YSendServer,
     YRcvServer = require('./yrcv-server').YRcvServer,
-    logger = require('../common/cnode-base').CNodeBase.prototype.logger;
-// golobal variables configuration
-var GStore = {
-
-    MSG_PUSHADDS_QUEUE: []		// 存储待处理的msgPushAdds的列表的队列，每次新接收到的msgPushAdds放到队尾
-};
+    logger = require('../common/cnode-base').CNodeBase.prototype.logger,
+    config = require('../config/index.js');
+var MSG_PUSHADDS_QUEUE = [];    // 存储待处理的msgPushAdds的列表的队列，每次新接收到的msgPushAdds放到队尾
 // parameters for child socket server
 var senderChildMsgSocketServerParams = {
-    MSG_PUSHADDS_QUEUE: GStore.MSG_PUSHADDS_QUEUE,
-    PORT: 9000, // listen port for child socket server
-    SEND_MSG_TO_PUSHADDS_PER: 100,  // 每次发送给gpns-sender的每个子进程的pushAdd的个数
-    SEND_MSG_START_LATE: 1000   // yrcv-server接收到消息后多少ms，开始循环检测是否有msgPushs要发送，当发送完消息后结束循环
+    MSG_PUSHADDS_QUEUE: MSG_PUSHADDS_QUEUE,
+    PORT: config.gpns.rcver.msg_socket_server.port,
+    SEND_MSG_TO_PUSHADDS_PER: config.gpns.rcver.msg_push.pushadds_per,
+    SEND_MSG_PUSH_DELAY: config.gpns.rcver.msg_push.push_delay
 };
 // parameters for rcver server
 var RCVER_SERVER_CONF = {
-    // 接收msg的http的服务的端口
-    PORT: 8080,
+    PORT: config.gpns.rcver.http_server.port,
     // send server instance reference
     SEND_SERVER: null,
     // msg and pushadds object queue
-    MSG_PUSHADDS_QUEQUE: GStore.MSG_PUSHADDS_QUEUE
+    MSG_PUSHADDS_QUEQUE: MSG_PUSHADDS_QUEUE
 }
 
 function exit() {

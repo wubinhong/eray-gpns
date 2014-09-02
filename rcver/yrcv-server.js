@@ -9,24 +9,18 @@
 
 var http = require('http'), url = require('url'), util = require('util');
 var cNodeBase = require('../common/cnode-base'), YHttpMsg = require('../common/yhttp-msg').YHttpMsg,
-    MSG_STATUS = require('../common/yhttp-msg').MSG_STATUS;
+    MSG_STATUS = require('../common/yhttp-msg').MSG_STATUS, config = require('../config/index.js');
 
 /**
  * gpns-rcver接收服务支持的url列表
  */
 var ERcvServerPath = {
-    // register the remote host to this http server of gpns-rcver
-    senderRegist: '/gpns/sender/regist.do',
-    // deregister the remote host to this http server of gpns-rcver
-    senderDeregist: '/gpns/sender/deregist.do',
-    // get lightest payload server's ip
-    getIp: '/gpns/sender/get-ip.do',
-    // info gpns-sender-child's socket to destroy socket specified by pushadd excluding specified remoteId
-    senderChildSocketDestroy: '/gpns/sender/child/socket/destroy.do',
-    // get gpns-rcver's info including all distributing gpns-senders, and gpns-sender-child socket channel
-    monitorRcverInfo: '/gpns/monitor/rcver-info.do',
-    // 接收推送的msgPushAdds
-    msgPush: '/gpns/msg/push.do'
+    senderRegist: config.gpns.rcver.http_server.path_sender_regist,
+    senderDeregist: config.gpns.rcver.http_server.path_sender_deregist,
+    getIp: config.gpns.rcver.http_server.path_sender_get_ip,
+    senderChildSocketDestroy: config.gpns.rcver.http_server.path_sender_child_socket_destroy,
+    monitorRcverInfo: config.gpns.rcver.http_server.path_monitor_rcver_info,
+    msgPush: config.gpns.rcver.http_server.path_msg_push
 };
 
 /**
@@ -47,7 +41,6 @@ function YRcvServer(RCVER_SERVER_CONF) {
     // a map that store gpns-sender which register to gpns-rcver. e.g. {"127.0.0.1":{"HOST":"127.0.0.1","CLIENT_SOCKET_SERVER_PORT":8000,"HTTP_SERVER_PORT":7000,"PATH_SOOCKET_TOTAL":"/child/socket/total.do"}}
     this._senderMap = {};
     this._senderArr = [];
-    this._scheduleTaskItvl = 5000;
     // gpns-rcver status
     this._onClose = null;
 }
@@ -75,7 +68,7 @@ YRcvServer.prototype.scheduleTask = function () {
             thisObj._infoRcvServer('<== schedule report: senderChildMsgSocketMap = %j', Object.keys(thisObj._sendSvr._senderChildMsgSocketMap));
             thisObj._infoRcvServer('schedule task end!');
         });
-    }, thisObj._scheduleTaskItvl);
+    }, config.gpns.rcver.schedule.period);
 };
 /**
  * start a http server for API servicess
