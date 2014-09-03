@@ -14,7 +14,7 @@
 var util = require('util'), net = require('net'), http = require('http'), url = require('url');
 var YMap = require('../common/ymap').YMap,
     cNodeBase = require('../common/cnode-base'), YHttpMsg = require('../common/yhttp-msg').YHttpMsg,
-    MSG_STATUS = require('../common/yhttp-msg').MSG_STATUS;
+    MSG_STATUS = require('../common/yhttp-msg').MSG_STATUS, config = require('../config/index.js');
 
 /**
  * parent process class
@@ -327,7 +327,7 @@ YParentProcess.prototype.getChildSocketPool = function () {
         arr.push(child);
         total += value.csNumber;
     }, null, null);
-    return {pool: arr, total: total};
+    return {host: config.gpns.sender.host, pool: arr, total: total};
 };
 
 /**

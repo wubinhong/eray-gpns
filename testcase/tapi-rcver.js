@@ -136,5 +136,6 @@ APIRcver.prototype.start = function () {
 /**
  * test case for http server of gpns-rcver
  */
-//new APIRcver('gpns.weather.com.cn', 80).start();
-new APIRcver('127.0.0.1', 8080).start();
+new APIRcver('gpns.weather.com.cn', 80).start();
+//new APIRcver('127.0.0.1', 8080).start();
+//new APIRcver('192.168.2.191', 8080).start();
