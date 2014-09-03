@@ -159,8 +159,7 @@ YRcvServer.prototype._handleSenderDeregist = function (req, res) {
         thisObj._infoRcvServer('receive request for sender deregist: %s', body);
         try {
             var registInfo = JSON.parse(body);
-            delete thisObj._senderMap[registInfo.HOST];
-            thisObj._senderArr.delete(registInfo.HOST);
+            thisObj._delSender(registInfo.HOST);
             thisObj._infoRcvServer('after delete senderMap -> %j', thisObj._senderMap);
             thisObj._infoRcvServer('after delete senderArr -> %j', thisObj._senderArr);
             thisObj._resWrite(res, 200, new YHttpMsg(MSG_STATUS.SUCCESS, 'deregister successfully', registInfo));
@@ -187,13 +186,17 @@ YRcvServer.prototype._handleGetIp2 = function (req, res) {
         thisObj._traceRcvServer('receive request body: %s', body);
         try {
             var senderHost = thisObj._senderArr.shift();
-            thisObj._senderArr.push(senderHost);
-            var lightServer = thisObj._senderMap[senderHost];
-            var gpnsSocketServer = {
-                HOST: lightServer.HOST,
-                PORT: lightServer.CLIENT_SOCKET_SERVER_PORT
-            };
-            thisObj._resWrite(res, 200, new YHttpMsg(MSG_STATUS.SUCCESS, 'get gpns-sender ip successfully', gpnsSocketServer));
+            if(senderHost) {
+                thisObj._senderArr.push(senderHost);
+                var lightServer = thisObj._senderMap[senderHost];
+                var gpnsSocketServer = {
+                    HOST: lightServer.HOST,
+                    PORT: lightServer.CLIENT_SOCKET_SERVER_PORT
+                };
+                thisObj._resWrite(res, 200, new YHttpMsg(MSG_STATUS.SUCCESS, 'get gpns-sender ip successfully', gpnsSocketServer));
+            } else {
+                throw new Error('_senderArr is empty!');
+            }
         } catch (err) {
             thisObj._errorRcvServer('something bad happen!: %s', err.stack);
             thisObj._resWrite(res, 200, new YHttpMsg(MSG_STATUS.FAILURE, err.message, null));
@@ -289,7 +292,7 @@ YRcvServer.prototype._handleMonitorRcverInfo = function (req, res) {    // FIXME
         // body example: {"pushAdd":"1350436022172342","exclude":"61.4.184.30:9527"}
         thisObj._traceRcvServer('receive request body: %s', body);
         try {
-            var params = JSON.parse(body)
+//            var params = JSON.parse(body);
             var senderHostArr = Object.keys(thisObj._senderMap);
             var senders = [];
             thisObj._getSocketInfo(senderHostArr, 0, senders, function (senderHostArr, senders) {
@@ -328,7 +331,7 @@ YRcvServer.prototype._getSocketInfo = function (srcArr, idx, destArr, cb) {
                 thisObj._getSocketInfo(srcArr, idx + 1, destArr, cb);
             }, function (e) {
                 thisObj._warnRcvServer('delete invalid sender: %s', senderHost);
-                delete thisObj._senderMap[senderHost];
+                thisObj._delSender(senderHost);
                 thisObj._warnRcvServer('senderMap after delete: %j', thisObj._senderMap);
                 thisObj._warnRcvServer('senderArr after delete: %j', thisObj._senderArr);
                 thisObj._getSocketInfo(srcArr, idx + 1, destArr, cb);
@@ -363,7 +366,7 @@ YRcvServer.prototype._getSocketTotal = function (srcArr, idx, destArr, cb) {
                 thisObj._getSocketTotal(srcArr, idx + 1, destArr, cb);
             }, function (e) {
                 thisObj._warnRcvServer('delete invalid sender: %s', senderHost);
-                delete thisObj._senderMap[senderHost];
+                thisObj._delSender(senderHost);
                 thisObj._warnRcvServer('senderMap after delete: %j', thisObj._senderMap);
                 thisObj._warnRcvServer('senderArr after delete: %j', thisObj._senderArr);
                 thisObj._getSocketTotal(srcArr, idx + 1, destArr, cb);
@@ -400,7 +403,19 @@ YRcvServer.prototype._handleMsgPush = function (req, res) {
         }
     });
 };
-
+/**
+ * delete collection member of gpns-rcver by {@link host}
+ * @param host
+ * @private
+ */
+YRcvServer.prototype._delSender = function (host) {
+    var thisObj = this;
+    delete thisObj._senderMap[host];
+    var idx = thisObj._senderArr.indexOf(host);
+    if(idx > -1) {
+        thisObj._senderArr.slice(idx, 1);
+    }
+};
 /**
  * 验证接收的msgPushAdds格式是否正确，不正确抛出异常
  *
