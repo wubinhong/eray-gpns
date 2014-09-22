@@ -24,6 +24,7 @@ var msg = require('../common/ymsg'), cmsg = require('./../common/cmsg'),
  */
 function YChannel(socket, rcvItvlTimeout, sendHeartbeatItvl, reconnConf, onGetPushAdd, onGetHeart) {
     this.socket = socket;						// socket
+    this.remoteId = util.format('%s:%s', socket.remoteAddress, socket.remotePort);
     this.socket.setNoDelay({noDelay: true});
     this.pushAdd = null; 						// pushAdd
     this.lastSendTime = new Date().getTime();	// 上一次发送消息的时间
@@ -134,7 +135,8 @@ YChannel.prototype.sendNotification = function (notification) {
     sendMsg.type = cmsg.EMsgType.sNotification;
     sendMsg.content[cmsg.EMsgKey.sNotification_msg] = notification;
     var msgEncoded = sendMsg.encode();  // 5|{"id":1234,"type":1,,"title":"天气提醒","content":"今天晴天，适合出游","detail":"<a>http:www.google.com</a>"}#
-    this._debugChannel('push notification[%s] to %s', msgEncoded, this.pushAdd);
+//    this._debugChannel('push notification[%s] to %s', msgEncoded, this.pushAdd);
+    this._infoChannel('==> push notification: pushAdd = [%s], host = [%s], to %s', this.pushAdd, this.remoteId, msgEncoded);
     this.socket.write(msgEncoded);
 };
 
