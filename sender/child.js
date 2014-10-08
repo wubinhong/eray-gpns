@@ -107,7 +107,13 @@ YChildProcess.prototype._startParentMsgListener = function () {
                 thisObj.gparam.reconnConf,
                 function (thisChannel) {    // func invoked when socket receive pushadd
                     var pushAdd = thisChannel.pushAdd;
-                    thisObj._debugChild('new connection register with pushadd: %s', pushAdd);
+                    thisObj._debugChild('new connection registered with pushadd: %s', pushAdd);
+                    // validation
+                    if(!pushAdd) {
+                        thisObj._warnChild('new connection destroyed with invalid pushadd: %s', pushAdd);
+                        thisChannel.destroy();
+                        return;
+                    }
                     // destroy socket with duplicate pushadd
                     thisObj._callRcverAPI4SocketDestroy(pushAdd, function () {
                         thisObj._delChanlFromChild(pushAdd);
@@ -156,10 +162,7 @@ YChildProcess.prototype._callRcverAPI4SocketDestroy = function (pushAdd, cb) {
     if(msgSocket) {   // if message socket haven't been destroyed
         var uri = thisObj.gparam.pathGPNSRcverAPI4SocketDestroy;
         var exclude = util.format('%s:%s', config.gpns.sender.host, msgSocket.localPort);
-        console.log('exclude: ' + exclude);
         var query = JSON.stringify({pushAdd: pushAdd, exclude: exclude});
-        console.log(util.format('uri: %s', uri));
-        console.log(util.format('query: %j', query));
         thisObj.httpPost(uri, query, function (str) {
             if(cb) cb(str);
         });
