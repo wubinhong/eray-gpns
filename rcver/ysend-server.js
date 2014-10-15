@@ -136,7 +136,7 @@ YSendServer.prototype.startCmdAndExec = function () {
     var timeout = thisObj._senderChildMsgSocketServerParams.SEND_MSG_PUSH_DELAY;
     thisObj._infoSendServer('《cmd VS exe》 recursion will launch in %s second...', timeout/1000);
     setTimeout(function () {
-        thisObj._startComander.call(thisObj, null);
+        thisObj._startCommander.call(thisObj, null);
         thisObj._infoSendServer('《cmd VS exe》 begin...');
     }, timeout);
 };
@@ -144,7 +144,7 @@ YSendServer.prototype.startCmdAndExec = function () {
 /**
  * 启动命令器，命令器内部会启动执行器
  */
-YSendServer.prototype._startComander = function (cmdRtn) {
+YSendServer.prototype._startCommander = function (cmdRtn) {
     var thisObj = this;
     // handle cmdRtn
     if(cmdRtn && cmdRtn.type==ECmdType.errRtn) {
@@ -192,7 +192,7 @@ YSendServer.prototype._startExecutor = function (cmd) {
     }
 
     setImmediate(function () {
-        thisObj._startComander.call(thisObj, sendCmdRtn);
+        thisObj._startCommander.call(thisObj, sendCmdRtn);
     });
 };
 /**

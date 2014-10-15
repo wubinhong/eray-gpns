@@ -60,7 +60,8 @@ APIRcver.prototype.pushBatch = function (batch, total) {
     var query = {
         msg: {
             "id": 1234, "type": 1, "title": "天气提醒", "content": util.format('【%s】-格格哟，今天晴天，适合出游', new Date()),
-            "detail": "<a>http:www.google.com</a>"
+            "detail": "<a>http:www.google.com</a>",
+            "cert": "com.test2.weatherapi"
         },
         pushAdds: [],
         "expiredTime": expiredTime
@@ -83,8 +84,9 @@ APIRcver.prototype.push = function (pushAdds) {
     var now = new Date();
     var query = {
         msg: {
-            "id": 1237, "type": 1, "title": "天气提醒哦", "content": util.format('【%s】-格格哟，今天晴天，适合出游', now.format(now.PATTERN.LONG)),
-            "detail": "<a>http:www.google.com</a>"
+            "id": 1237, "type": 1, "title": "天气提醒哦", "content": util.format('【%s】-格格哟^^，今天晴天，适合出游', now.format(now.PATTERN.LONG)),
+            "detail": "<a>http:www.google.com</a>",
+            "cert": "com.test2.weatherapi"
         },
         pushAdds: pushAdds,
         "expiredTime": now.setHours(now.getHours() + 1)
@@ -123,14 +125,14 @@ APIRcver.prototype.monitorRcverInfo = function () {
  */
 APIRcver.prototype.start = function () {
     // push a test msg to pushadds
-//    this.push(['pushadd0']);
+    this.push(['pushadd01']);
 //    this.push(['pushadd0', 'pushadd1', '042915221123201']);
-//    this.push(['101616564451701']);
+//    this.push(['072112200337901']);
     // batch message push
 //    this.pushBatch(1000, 5000);
 //    this.getIp();
 //    this.senderChildSocketDestroy();
-    this.monitorRcverInfo();
+//    this.monitorRcverInfo();
 };
 // 启动
 /**

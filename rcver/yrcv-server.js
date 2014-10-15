@@ -411,9 +411,10 @@ YRcvServer.prototype._handleMsgPush = function (req, res) {
 YRcvServer.prototype._delSender = function (host) {
     var thisObj = this;
     delete thisObj._senderMap[host];
+    // delete specified host in _senderArr
     var idx = thisObj._senderArr.indexOf(host);
     if(idx > -1) {
-        thisObj._senderArr.slice(idx, 1);
+        thisObj._senderArr.splice(idx, 1);
     }
 };
 /**
@@ -423,6 +424,12 @@ YRcvServer.prototype._delSender = function (host) {
  */
 YRcvServer.prototype._verify = function (msgPushAdds) {
     if (msgPushAdds.msg && msgPushAdds.pushAdds && msgPushAdds.expiredTime) {
+        if (!msgPushAdds.msg.cert) {
+            throw new Error('msg.cert is required!');
+        }
+        if (config.gpns.rcver.certs.indexOf(msgPushAdds.msg.cert) == -1) {
+            throw new Error('msg.cert is invalid!');
+        }
         if (!msgPushAdds.pushAdds.length) {
             throw new Error('pushAdds is not array or is empty');
         }

@@ -283,14 +283,14 @@ YChildProcess.prototype._handleMsgPush = function (msg) {
     var thisObj = this;
     thisObj._infoChild('get a msg from rcver-sender: %s', msg);
     thisObj.msgArr.push(msg);
-    thisObj._startComder(null);
+    thisObj._startCmdAndExec(null);
 };
 /**
  * 启动命令器<br>
  * <li>给执行者下达命令：1.发送心跳包；2.发送推送消息
  * @param cmdRtn 命令返回信息，类型YCmdMsg
  */
-YChildProcess.prototype._startComder = function (cmdRtn) {
+YChildProcess.prototype._startCmdAndExec = function (cmdRtn) {
     //start--cmdExeRunning = true end--false
     var thisObj = this;
     thisObj._infoChild('start commder, cmdRtn=%j', cmdRtn);
@@ -334,7 +334,7 @@ YChildProcess.prototype._startExecutor = function (cmd) {
     }
 
     setImmediate(function () {
-        thisObj._startComder.call(thisObj, sendCmdRtn);
+        thisObj._startCmdAndExec.call(thisObj, sendCmdRtn);
     });
 };
 

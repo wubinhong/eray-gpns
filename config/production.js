@@ -66,6 +66,7 @@ var rcver = {
     ,schedule: {
         period: 5000    // unit: millisecond
     }
+    ,certs: ['com.test2.weatherapi']
 }
 
 

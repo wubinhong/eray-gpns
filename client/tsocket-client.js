@@ -124,15 +124,15 @@ SocketClient.prototype._handleNotification = function (socket, serverMsg, sendMs
 // launch
 //var host = '127.0.0.1';
 //var host = '192.168.2.193';
-var host = '61.4.184.65';
-//var host = '61.4.184.30';
+var host = '61.4.184.30';
 //new SocketClient(host, 8000, '042814063319901').connect();
 //new SocketClient(host, 8000, '101616564451701').connect();
 //new SocketClient(host, 8000, '1386302521119520').connect();
 //new SocketClient(host, 8000, '032707400110201').connect();
 //new SocketClient(host, 8000, 'pushadd00').connect();
-new SocketClient(host, 8000, 'pushadd0').connect();
-//new SocketClient(host, 8000, 'pushadd01').connect();
+//new SocketClient(host, 8000, 'pushadd0').connect();
+//new SocketClient(host, 8000, '').connect();
+new SocketClient(host, 8000, 'pushadd01').connect();
 //new SocketClient(host, 8000, 'pushadd02').connect();
 //new SocketClient(host, 8000, 'pushadd03').connect();
 //new SocketClient(host, 8000, 'pushadd01').connect();

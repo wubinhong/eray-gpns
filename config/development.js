@@ -22,7 +22,7 @@ var logging = {
 // redis server
 var redis = {
     session: {
-        host: '192.168.1.186'
+        host: '127.0.0.1'
         ,port: 6379
         ,author: null
     }
@@ -65,6 +65,7 @@ var rcver = {
     ,schedule: {
         period: 5000    // unit: millisecond
     }
+    ,certs: ['com.test2.weatherapi']
 }
 
 
@@ -72,7 +73,7 @@ var rcver = {
 /*******************************************
  * gpns-sender configuration
  *******************************************/
-sender = {
+var sender = {
     host: '127.0.0.1'
     ,parent: {
         http_server: {

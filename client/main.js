@@ -6,8 +6,8 @@
  * @date     2014-02-22
  ***************************************************************************/
 // distributed property configuration
-var DIST_GPNS_RCVER_API = 'http://gpns.weather.com.cn/gpns/sender/get-ip.do';
-//var DIST_GPNS_RCVER_API = 'http://192.168.2.191:8080/gpns/sender/get-ip.do';
+//var DIST_GPNS_RCVER_API = 'http://gpns.weather.com.cn/gpns/sender/get-ip.do';
+var DIST_GPNS_RCVER_API = 'http://127.0.0.1:8080/gpns/sender/get-ip.do';
 //var DIST_GPNS_SENDER_IP = 'app.weather.com.cn';
 var DIST_GPNS_SENDER_IP = '61.4.184.159';   // F5 SOCKET PROXY ip
 // two option: API | FIX_IP, if API, then DIST_GPNS_RCVER_API need to be specified, or DIST_GPNS_SENDER_IP need to be spcified.
@@ -19,7 +19,7 @@ var cNodeUtil = require('../common/cnode-base.js').cNodeUtil,
 
 var GParam = {
     start: 0,    //每个socket对应的pushAdd='pushadd'+number，number的起止值=start
-    limit: 4,     // 每个进程产生多少个socket
+    limit: 1,     // 每个进程产生多少个socket
     GPNS_RCVER_API: DIST_GPNS_RCVER_API,
     GPNS_SENDER_IP: DIST_GPNS_SENDER_IP,
     GPNS_MODE: DIST_MODE,
