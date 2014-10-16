@@ -65,7 +65,7 @@ var rcver = {
     ,schedule: {
         period: 5000    // unit: millisecond
     }
-    ,certs: ['com.test2.weatherapi', 'com.test.weatherapi', 'com.test.bjtrafficapi']
+    ,certs: ['com.pmsc.chinaweather', 'com.pmsc.chinaweather', 'com.pmsc.chinaweather', 'com.test2.weatherapi', 'com.test.weatherapi', 'com.test.bjtrafficapi']
 }
 
 
