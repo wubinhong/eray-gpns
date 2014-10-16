@@ -61,7 +61,7 @@ APIRcver.prototype.pushBatch = function (batch, total) {
         msg: {
             "id": 1234, "type": 1, "title": "天气提醒", "content": util.format('【%s】-格格哟，今天晴天，适合出游', new Date()),
             "detail": "<a>http:www.google.com</a>",
-            "cert": "com.test2.weatherapi"  // ['com.pmsc.chinaweather', 'com.pmsc.chinaweather', 'com.pmsc.chinaweather', 'com.test2.weatherapi', 'com.test.weatherapi', 'com.test.bjtrafficapi']
+            "cert": "com.test2.weatherapi"  // ['com.pmsc.chinaweather', 'com.cxwl.chinaweathertv', 'com.beijingtraffic', 'com.test2.weatherapi', 'com.test.weatherapi', 'com.test.bjtrafficapi']
         },
         pushAdds: [],
         "expiredTime": expiredTime
@@ -86,7 +86,7 @@ APIRcver.prototype.push = function (pushAdds) {
         msg: {
             "id": 1237, "type": 1, "title": "天气提醒哦", "content": util.format('【%s】-格格哟^^，今天晴天，适合出游', now.format(now.PATTERN.LONG)),
             "detail": "<a>http:www.google.com</a>",
-            "cert": "com.test2.weatherapi"  // ['com.pmsc.chinaweather', 'com.pmsc.chinaweather', 'com.pmsc.chinaweather', 'com.test2.weatherapi', 'com.test.weatherapi', 'com.test.bjtrafficapi']
+            "cert": "com.test2.weatherapi"  // ['com.pmsc.chinaweather', 'com.cxwl.chinaweathertv', 'com.beijingtraffic', 'com.test2.weatherapi', 'com.test.weatherapi', 'com.test.bjtrafficapi']
         },
         pushAdds: pushAdds,
         "expiredTime": now.setHours(now.getHours() + 1)
