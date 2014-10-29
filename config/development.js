@@ -65,7 +65,11 @@ var rcver = {
     ,schedule: {
         period: 5000    // unit: millisecond
     }
-    ,certs: ['com.pmsc.chinaweather', 'com.cxwl.chinaweathertv', 'com.beijingtraffic', 'com.test2.weatherapi', 'com.test.weatherapi', 'com.test.bjtrafficapi']
+    ,certs: [
+        'com.pmsc.chinaweather', 'com.pmsc.chinaweather.weather4decision.phone.china2x', 'com.pmsc.weather4decision.phone.hainan',
+        'com.pmsc.weather4decision.phone.hainan',
+        'com.cxwl.chinaweathertv', 'com.beijingtraffic',
+        'com.test2.weatherapi', 'com.test.weatherapi', 'com.test.bjtrafficapi']
 }
 
 
