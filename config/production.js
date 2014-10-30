@@ -68,7 +68,7 @@ var rcver = {
     }
     ,certs: [
         'com.pmsc.chinaweather', 'com.pmsc.chinaweather.weather4decision.phone.china2x', 'com.pmsc.weather4decision.phone.hainan',
-        'com.pmsc.weather4decision.phone.hainan',
+        'com.pmsc.weather4decision.phone.heilongjiang',
         'com.cxwl.chinaweathertv', 'com.beijingtraffic',
         'com.test2.weatherapi', 'com.test.weatherapi', 'com.test.bjtrafficapi']
 }
