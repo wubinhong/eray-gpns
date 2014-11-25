@@ -184,7 +184,7 @@ YChildProcess.prototype._socketPoolChecking = function () {
         } else {
             thisObj._traceChild('destroy expired socket: pushadd=%s --> %s:%s',
                 channel.pushAdd, channel._remoteAddress, channel._remotePort);
-            thisObj._delChanlFromChild(channel.pushAdd);
+            thisObj._delChanlFromPool(channel);
         }
     }
 };
@@ -398,6 +398,28 @@ YChildProcess.prototype._delChanlFromChild = function (pushAdd) {
     this._traceChild('pushAddChanlMap keys: %j', this.pushAddChanlMap.keys());
     this._sendParentMsg4CSNumber();
 };
+
+/**
+ * 从子socket pool中删除channel
+ * @param channel
+ */
+YChildProcess.prototype._delChanlFromPool = function (channel) {
+    if(channel) {
+        var pushAdd = channel.pushAdd;
+
+        this._traceChild('get old channel[%s:%s] by %s, and destroy it!',
+            channel._remoteAddress, channel._remotePort, pushAdd);
+        channel.destroy();
+
+        if(pushAdd) {
+            this.pushAddChanlMap.delete(pushAdd);
+            this._traceChild('pushAddChanlMap keys: %j', this.pushAddChanlMap.keys());
+            this._sendParentMsg4CSNumber();
+        }
+
+    }
+};
+
 YChildProcess.prototype._addChanlToChild = function (pushAdd, channel) {
     this.pushAddChanlMap.add(pushAdd, channel);
     this._traceChild('pushAddChanlMap keys: %j', this.pushAddChanlMap.keys());
